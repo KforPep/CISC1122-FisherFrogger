@@ -1,4 +1,4 @@
-
+package application;
 
 import java.util.Random;
 
@@ -82,6 +82,30 @@ public class ObjectSpeed {
 		
 }
 
+// TUTORIAL CODE FOUND ONLINE FOR JAVAFX INTERPOLATOR
+
+//private void init(Stage primaryStage) {
+//    Group root = new Group();
+//    primaryStage.setResizable(false);
+//    primaryStage.setScene(new Scene(root, 250, 90));
+//
+//    //create circles by method createMovingCircle listed below
+//    Circle circle1 = createMovingCircle(Interpolator.LINEAR); //default interpolator
+//    circle1.setOpacity(0.7);
+//    Circle circle2 = createMovingCircle(Interpolator.EASE_BOTH); //circle slows down when reached both ends of trajectory
+//    circle2.setOpacity(0.45);
+//    Circle circle3 = createMovingCircle(Interpolator.EASE_IN);
+//    Circle circle4 = createMovingCircle(Interpolator.EASE_OUT);
+//    Circle circle5 = createMovingCircle(Interpolator.SPLINE(0.5, 0.1, 0.1, 0.5)); //one can define own behaviour of interpolator by spline method
+//    
+//    root.getChildren().addAll(
+//            circle1,
+//            circle2,
+//            circle3,
+//            circle4,
+//            circle5
+//    );
+//}
 
 
 
