@@ -2,7 +2,8 @@ package application;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-//changes
+
+//Parent Class
 public class Projectiles 
 {
 	protected String fileName;
@@ -14,27 +15,7 @@ public class Projectiles
 	protected int direction;
 	protected Image image;
 	protected ImageView view;
-}
-
-class Book extends Projectiles
-{
-	public Book()
-	{
-		fileName = "File:///" + System.getProperty("user.dir") + "/stackofbooks.png";
-		width = 100;
-		height = 100;
-		setupImage();
-	}
 	
-	public Book(int x, int y)
-	{
-		fileName = "File:///" + System.getProperty("user.dir") + "/stackofbooks.png";
-		width = 100;
-		height = 100;
-		xvalue = x;
-		yvalue = y;
-		setupImage();
-	}
 	public void setSpeed(int x)
 	{
 		speed = x;
@@ -47,14 +28,54 @@ class Book extends Projectiles
 	{
 		return view;
 	}
-	private void setupImage()
+}
+
+class Book extends Projectiles //book inherents projectile's variables and set-get functions
+{
+	public Book(int x, int y) //Contructor requires x and y location values
+	{
+		fileName = "File:///" + System.getProperty("user.dir") + "/stackofbooks.png";
+		width = 100;
+		height = 100;
+		xvalue = x;
+		yvalue = y;
+		setupImage();
+	}
+	
+	
+	private void setupImage() //returns imageview to be added to scene
 	{
 		image = new Image(fileName);
 		view = new ImageView(image);
 		view.setX(xvalue); 
 	    view.setY(yvalue);
-		view.setFitHeight(100); 
-	    view.setFitWidth(500); 
+		view.setFitHeight(height); 
+	    view.setFitWidth(width); 
 	    view.setPreserveRatio(true); 
+	}
+}
+
+class Code extends Projectiles //code inherents projectile's variables and set-get functions
+{
+	public Code(int x, int y)//Contructor requires x and y location values
+	{
+		fileName = "File:///" + System.getProperty("user.dir") + "/code.PNG";
+		width = 100;
+		height = 200;
+		xvalue = x;
+		yvalue = y;
+		setupImage();
+	}
+	
+	
+	private void setupImage() //returns imageview to be added to scene
+	{
+		image = new Image(fileName);
+		view = new ImageView(image);
+		view.setX(xvalue); 
+	    view.setY(yvalue);
+		view.setFitHeight(width); 
+	    view.setFitWidth(height);
+	    
 	}
 }
