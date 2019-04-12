@@ -2,7 +2,7 @@ package application;
 
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-
+//changes
 public class Projectiles 
 {
 	protected String fileName;
