@@ -189,18 +189,54 @@ public class Grid extends Application
 				{
 					if (i % 2 != 0) //if column number is odd
 					{
-						gridRow.get(i).setFill(Color.BLACK); //color rectangle at current index black
+						if(n == 13 || n == 7) //if the row number is either 14 or 8, color purple for safe space
+						{
+						gridRow.get(i).setFill(Color.PURPLE); //color rectangle at current index purple
+						}
+						else if (n == 1) //if the row number is 2, color purple for safe space
+						{
+							gridRow.get(i).setFill(Color.PURPLE); //color rectangle at current index purple
+						}
+						else if (n == 3 && (i == 3 || i == 5)) //colors rectangles blue to show where moving object will be placed
+						{
+							gridRow.get(i).setFill(Color.BLUE); //colors rectangle blue
+						}
+						else {
+							gridRow.get(i).setFill(Color.BLACK); //color rectangle at current index black
+						}
+					}
+					else if(n == 13 || n == 7) //if the row number is either 14 or 8, color purple for safe space
+					{
+						gridRow.get(i).setFill(Color.PURPLE); //color rectangle at current index purple
+					}
+					else if(n == 1) //if the row number is 2, color purple for safe space
+					{
+						gridRow.get(i).setFill(Color.PURPLE); //color rectangle at current index purple
+					}	
+					else if (n == 3 && (i == 4)) //colors rectangles blue to show where moving object will be placed
+					{
+						gridRow.get(i).setFill(Color.BLUE); //colors rectangle blue
 					}
 					else //if column number is even
-					{
+					{		
 						gridRow.get(i).setFill(Color.GREY); //color rectangle grey
 					}
 				}
-				else //if the row number is odd
+				else //if the row number is even
 				{
 					if (i % 2 != 0) //if the column number is even
 					{
-						gridRow.get(i).setFill(Color.GREY); //color rectangle grey
+						if (n == 0) //if the row number is 1, color purple for safe space
+						{
+						gridRow.get(i).setFill(Color.PURPLE); //color rectangle purple
+						}			
+						else {
+							gridRow.get(i).setFill(Color.GREY); //color rectangle grey
+						}
+					}
+					else if (n == 0) //if the row number is 1, color purple for safe space
+					{
+						gridRow.get(i).setFill(Color.PURPLE); //color rectangle purple
 					}
 					else //if the column number is odd
 					{
