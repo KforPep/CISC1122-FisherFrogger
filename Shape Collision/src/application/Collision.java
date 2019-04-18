@@ -47,6 +47,8 @@ public class Collision extends Application {
 		/* Code from moving object
 		 * Instead of using LayoutX, we altered the code to change the X instead so
 		 * that we could retrieve the bounds of the rectangle and compare them
+		 
+		 Well done.  This looks way more elegant. - J.M.Esh
 		 */
 		Timeline timeline = new Timeline(new KeyFrame(Duration.millis(40), new EventHandler<ActionEvent>() {
 			double dx = 5; //x velocity
