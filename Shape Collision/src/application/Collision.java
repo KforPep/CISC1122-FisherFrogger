@@ -1,7 +1,3 @@
-/* Object Collision
- * Caitlin, Colin & Ed
- */
-
 package application;
 
 import javafx.animation.FadeTransition;
