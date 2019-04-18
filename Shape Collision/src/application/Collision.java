@@ -8,7 +8,6 @@ import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.scene.Scene;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Circle;
@@ -24,9 +23,10 @@ public class Collision extends Application {
 	
 	@Override
 	public void start(Stage mainStage) {
-		Circle player = new Circle(50);
-		Rectangle log = new Rectangle(100, 50);
+		Circle player = new Circle(50); //Circle representing the player
+		Rectangle log = new Rectangle(100, 50); //Rectangle representing the object (in this case, a log)
 		
+		//Shape styling
 		log.setX(0);
 		log.setY(200);
 		log.setFill(Color.DARKRED);
@@ -35,44 +35,44 @@ public class Collision extends Application {
 		player.setCenterY(100);
 		player.setFill(Color.ALICEBLUE);
 		
-		
+		//Setting the stage...
 		Pane pane = new Pane();
-		pane.getChildren().addAll(player, log);
+		pane.getChildren().addAll(player, log); //add shapes to the pane
 		
-		Scene mainScene = new Scene(pane, 1000, 750);
+		Scene mainScene = new Scene(pane, 1000, 750); //Create a scene with the layout pane
 		
 		mainStage.setScene(mainScene);
+		mainStage.setTitle("Object Collision");
 		mainStage.show();
 		
 		/* Code from moving object
 		 * Instead of using LayoutX, we altered the code to change the X instead so
 		 * that we could retrieve the bounds of the rectangle and compare them
-		 
-		 Well done.  This looks way more elegant. - J.M.Esh
 		 */
 		Timeline timeline = new Timeline(new KeyFrame(Duration.millis(40), new EventHandler<ActionEvent>() {
-			double dx = 5; //x velocity
-			Bounds bounds = pane.getBoundsInLocal();
-			Bounds logBounds = log.getBoundsInLocal();
-			Bounds playerBounds = player.getBoundsInLocal();
+			double dx = 5; //X velocity of animation
+			Bounds bounds = pane.getBoundsInLocal(); //Bounds of the layout pane
 			
 			@Override
 			public void handle(ActionEvent e) {
-				log.setX(log.getX() + dx);
+				log.setX(log.getX() + dx); //Move log
 				
+				//If the log reaches the edge of the pane
 				if(log.getX() <= (bounds.getMinX()) || 
                         log.getX() >= (bounds.getMaxX() - log.getWidth()))
 				{
-	               	dx = -dx;
+	               	dx = -dx; //reverse direction
+	               	
+	               	//Fade in
 	               	FadeTransition fadeTransition = new FadeTransition();
-	          	    fadeTransition.setDuration(Duration.millis(3000));
+	          	    fadeTransition.setDuration(Duration.millis(3000)); //duration of fade animation
 	          	    fadeTransition.setNode(log);
 	          	    fadeTransition.setFromValue(0);
 	          	    fadeTransition.setToValue(1);
 	          	    fadeTransition.play();
                 }
 				
-				if(logBounds.intersects(playerBounds)) //Flicker color with collison
+				if(log.getBoundsInLocal().intersects(player.getBoundsInLocal())) //Flicker color with collision
 				{
 					if (player.getFill() == Color.ALICEBLUE)
 					{
@@ -84,13 +84,13 @@ public class Collision extends Application {
 					}
 				}
 			}
-		}));
+		})); //timeline
 		
 		timeline.setCycleCount(Timeline.INDEFINITE);
 	    timeline.play();
 		
 		//Events
-		mainScene.setOnMouseMoved(e -> {
+		mainScene.setOnMouseMoved(e -> { //Move circle object with mouse
 			player.setCenterX(e.getX());
 			player.setCenterY(e.getY());
 		});
