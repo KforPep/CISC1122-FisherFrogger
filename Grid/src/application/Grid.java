@@ -6,17 +6,22 @@
 
 package application;
 
+
+import java.io.File;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -36,7 +41,7 @@ public class Grid extends Application
 	} //main
 	
 	@Override
-	public void start(Stage mainStage) 
+	public void start(Stage mainStage) throws MalformedURLException 
 	{
 		mainStage.setWidth(900); //Set the width of the window, used to calculate grid tile size
 		
@@ -166,13 +171,27 @@ public class Grid extends Application
 	} //start
 	
 	//Generate a 2d array list of squares to form a grid
-	public ArrayList<ArrayList<Rectangle>> gridGen(double tileSize, int gridWidth, int gridHeight) 
+	public ArrayList<ArrayList<Rectangle>> gridGen(double tileSize, int gridWidth, int gridHeight) throws MalformedURLException 
 	{		
 		ArrayList<ArrayList<Rectangle>> grid = new ArrayList<ArrayList<Rectangle>>(); //2d array list to hold rows
 		
 		//Coordinates of square being drawn
 		double x = 0;
 		double y = 0;
+		   File file = new File("C:\\Users\\dixonb33916\\Downloads\\CISC1122-FisherFrogger-master\\Grid\\src\\application\\user-top-view.png"); 
+		      File file1 = new File("C:\\Users\\dixonb33916\\Downloads\\CISC1122-FisherFrogger-master\\Grid\\src\\application\\desktop.png");
+		      File file2 = new File("C:\\Users\\dixonb33916\\Downloads\\CISC1122-FisherFrogger-master\\Grid\\src\\application\\house.png");
+		      String localUrl = file.toURI().toURL().toString();
+		      String localUrl1 = file1.toURI().toURL().toString();
+		      String localUrl2 = file2.toURI().toURL().toString();
+		      // don't load in the background
+		      Image localImage = new Image(localUrl);
+		      Image localImage1 = new Image(localUrl1);
+		      Image localImage2 = new Image(localUrl2);
+		      ImagePattern pattern = new ImagePattern(localImage);
+		      ImagePattern pattern1 = new ImagePattern(localImage1);
+		      ImagePattern pattern2 = new ImagePattern(localImage2);
+			
 		
 		for (int n = 0; n < gridHeight; n++) //1 iteration = 1 row
 		{
@@ -191,11 +210,11 @@ public class Grid extends Application
 					{
 						if(n == 13 || n == 7) //if the row number is either 14 or 8, color purple for safe space
 						{
-						gridRow.get(i).setFill(Color.PURPLE); //color rectangle at current index purple
+						gridRow.get(i).setFill(Color.WHITE); //color rectangle at current index purple
 						}
 						else if (n == 1) //if the row number is 2, color purple for safe space
 						{
-							gridRow.get(i).setFill(Color.PURPLE); //color rectangle at current index purple
+							gridRow.get(i).setFill(pattern); //color rectangle at current index purple
 						}
 						else if (n == 3 && (i == 3 || i == 5)) //colors rectangles blue to show where moving object will be placed
 						{
@@ -207,11 +226,14 @@ public class Grid extends Application
 					}
 					else if(n == 13 || n == 7) //if the row number is either 14 or 8, color purple for safe space
 					{
-						gridRow.get(i).setFill(Color.PURPLE); //color rectangle at current index purple
+						gridRow.get(i).setFill(pattern2); //color rectangle at current index purple
 					}
 					else if(n == 1) //if the row number is 2, color purple for safe space
 					{
-						gridRow.get(i).setFill(Color.PURPLE); //color rectangle at current index purple
+						if (i % 2 != 0) //if the column number is even
+						gridRow.get(i).setFill(pattern2); //color rectangle at current index purple
+						else
+							gridRow.get(i).setFill(Color.GREY); //color rectangle at current index purple
 					}	
 					else if (n == 3 && (i == 4)) //colors rectangles blue to show where moving object will be placed
 					{
@@ -228,7 +250,7 @@ public class Grid extends Application
 					{
 						if (n == 0) //if the row number is 1, color purple for safe space
 						{
-						gridRow.get(i).setFill(Color.PURPLE); //color rectangle purple
+						gridRow.get(i).setFill(Color.GREY); //color rectangle purple
 						}			
 						else {
 							gridRow.get(i).setFill(Color.GREY); //color rectangle grey
@@ -236,7 +258,7 @@ public class Grid extends Application
 					}
 					else if (n == 0) //if the row number is 1, color purple for safe space
 					{
-						gridRow.get(i).setFill(Color.PURPLE); //color rectangle purple
+						gridRow.get(i).setFill(pattern1); //color rectangle purple
 					}
 					else //if the column number is odd
 					{
