@@ -1,10 +1,12 @@
 /* TO-DO:
+
  * Prevent diagonal movement?
  * Movement of player on moving objects
  * Smoother animations
  */
 
 package application;
+
 
 import java.util.ArrayList;
 
@@ -16,16 +18,29 @@ import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+
+
+import java.io.File;
+import java.net.MalformedURLException;
+import java.util.ArrayList;
+
+import javafx.application.Application;
+import javafx.geometry.Pos;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
+
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+
 
 public class Grid extends Application
 {
@@ -35,7 +50,9 @@ public class Grid extends Application
 	private final int GRID_HEIGHT = 14; //Number of tiles in each column (14 default)		 * GRID_WIDTH IS ODD &
 	private int playerY = GRID_HEIGHT - 1; //Index of player row							 * GRID_HEIGHT IS EVEN
 	private int playerX = (int)(GRID_WIDTH/2); //Index of player column						 */
+
 	final double PADDING = 16; //Width of spacing around the grid
+
 	
 	public static void main(String[] args)
 	{
@@ -43,6 +60,7 @@ public class Grid extends Application
 	} //main
 	
 	@Override
+
 	public void start(Stage mainStage) 
 	{
 		mainStage.setWidth(900); //Set the width of the window, used to calculate grid tile size
@@ -65,6 +83,7 @@ public class Grid extends Application
 		//Player repsawn location
 		final double RESPAWN_X = MIDDLE_COLUMN; //respawn column
 		final double RESPAWN_Y = BOTTOM_ROW; //respawn row
+
 		
 		ArrayList<ArrayList<Rectangle>> grid = gridGen(TILE_SIZE, GRID_WIDTH, GRID_HEIGHT); //generate game grid
 		
@@ -82,6 +101,8 @@ public class Grid extends Application
 			for (int i = 0; i < GRID_WIDTH; i++) //Fill the row with squares (1 iteration = 1 square)
 			{
 				row.getChildren().add(grid.get(n).get(i)); //Take square from grid arraylist and add it to the row
+
+
 			}
 			
 			row.setAlignment(Pos.CENTER); //Align the row to the center
@@ -92,6 +113,7 @@ public class Grid extends Application
 		Circle player = new Circle(PLAYER_SIZE);
 		
 		player.setFill(Color.YELLOW);
+
 		player.setTranslateX(MIDDLE_COLUMN); //Player start X
 		player.setTranslateY(BOTTOM_ROW); //Player start Y
 		
@@ -164,10 +186,12 @@ public class Grid extends Application
 		Color truckColor = Color.ANTIQUEWHITE;
 		String truckAnimType = "LEFT";
 		ArrayList<Rectangle> trucks = createVehicleArray(truckCount, truckWidth, truckHeight, truckX, truckY, truckColor); //Create array of trucks
+
 		
 		//Stack pane to put objects on top of each other
 		StackPane stack = new StackPane();
 		
+
 		stack.getChildren().add(vbxGrid); //Game grid
 		stack.getChildren().add(player); //Player
 		arrayListToStackPane(cars1, stack); //Cars (row 2)
@@ -183,15 +207,19 @@ public class Grid extends Application
 		
 		//Scene
 		Scene mainScene = new Scene(pane, 800, GRID_Y + PADDING);
+
 		
 		mainScene.getStylesheets().add("style.css"); //import style sheet
 		
 		//Stage
+
 		//mainStage.setResizable(false);
+
 		mainStage.setTitle("Class Simulator");
 		mainStage.setScene(mainScene);
 		mainStage.show();
 		
+
 		/* OBJECT ANIMATIONS */
 		
 		//Create and start animations
@@ -206,6 +234,7 @@ public class Grid extends Application
 		//Key press
 		mainScene.setOnKeyPressed(e -> 
 		{
+
 			
 			//Player movement
 			if ((e.getCode() == KeyCode.UP) || e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.RIGHT)
@@ -262,20 +291,25 @@ public class Grid extends Application
 					}
 				}
 				
+
 			} //player movement
+
 			
 		}); //key press event
 		
 	} //start
 	
 	//Generate a 2d array list of squares to form a grid
+
 	public ArrayList<ArrayList<Rectangle>> gridGen(double tileSize, int gridWidth, int gridHeight) 
+
 	{		
 		ArrayList<ArrayList<Rectangle>> grid = new ArrayList<ArrayList<Rectangle>>(); //2d array list to hold rows
 		
 		//Coordinates of square being drawn
 		double x = 0;
 		double y = 0;
+
 		
 		for (int n = 0; n < gridHeight; n++) //1 iteration = 1 row
 		{
@@ -294,11 +328,13 @@ public class Grid extends Application
 					{
 						if(n == 13 || n == 7) //if the row number is either 14 or 8, color purple for safe space
 						{
+
 						gridRow.get(i).setFill(Color.PURPLE); //color rectangle at current index purple
 						}
 						else if (n == 1) //if the row number is 2, color purple for safe space
 						{
 							gridRow.get(i).setFill(Color.PURPLE); //color rectangle at current index purple
+
 						}
 						else if (n == 3 && (i == 3 || i == 5)) //colors rectangles blue to show where moving object will be placed
 						{
@@ -310,11 +346,13 @@ public class Grid extends Application
 					}
 					else if(n == 13 || n == 7) //if the row number is either 14 or 8, color purple for safe space
 					{
+
 						gridRow.get(i).setFill(Color.PURPLE); //color rectangle at current index purple
 					}
 					else if(n == 1) //if the row number is 2, color purple for safe space
 					{
 						gridRow.get(i).setFill(Color.PURPLE); //color rectangle at current index purple
+
 					}	
 					else if (n == 3 && (i == 4)) //colors rectangles blue to show where moving object will be placed
 					{
@@ -331,7 +369,9 @@ public class Grid extends Application
 					{
 						if (n == 0) //if the row number is 1, color purple for safe space
 						{
+
 						gridRow.get(i).setFill(Color.PURPLE); //color rectangle purple
+
 						}			
 						else {
 							gridRow.get(i).setFill(Color.GREY); //color rectangle grey
@@ -339,7 +379,9 @@ public class Grid extends Application
 					}
 					else if (n == 0) //if the row number is 1, color purple for safe space
 					{
+
 						gridRow.get(i).setFill(Color.PURPLE); //color rectangle purple
+
 					}
 					else //if the column number is odd
 					{
@@ -354,6 +396,7 @@ public class Grid extends Application
 		
 		return grid;
 	} //gridGen
+
 	
 	//Create a vehicle (rectangle) array
 	public ArrayList<Rectangle> createVehicleArray(int vehicleCount, double width, double height, double x, double y, Color color)
