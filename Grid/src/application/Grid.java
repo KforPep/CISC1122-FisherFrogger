@@ -50,9 +50,10 @@ public class Grid extends Application
 	private final int GRID_HEIGHT = 14; //Number of tiles in each column (14 default)		 * GRID_WIDTH IS ODD &
 	private int playerY = GRID_HEIGHT - 1; //Index of player row							 * GRID_HEIGHT IS EVEN
 	private int playerX = (int)(GRID_WIDTH/2); //Index of player column						 */
-
+	int topBound = -342;
+	int bottomBound = 442;
 	final double PADDING = 16; //Width of spacing around the grid
-
+	boolean hitOrRun = false;
 	
 	public static void main(String[] args)
 	{
@@ -200,6 +201,8 @@ public class Grid extends Application
 		arrayListToStackPane(cars4, stack); //Cars (row 5)
 		arrayListToStackPane(trucks, stack); //Trucks (row 6)
 		
+		
+		
 		stack.setAlignment(Pos.CENTER); //Stack pane alignment
 		
 		//Border pane to hold the stack pane
@@ -247,11 +250,15 @@ public class Grid extends Application
 				if (e.getCode() == KeyCode.UP)
 				{
 					//Check if movement is within the bounds of grid
-					if (playerY > 0)
-					{
+					if (player.getTranslateY() <= (topBound))
+					{}
+					else{
+						System.out.println("Player's x is - " + player.getTranslateX());
+						System.out.println("Player's y is - " + player.getTranslateY());
+						System.out.println("Main scene's height is - " + mainScene.getHeight());
 						double newY = currentY - TILE_SIZE; //Determine spot to move to
 						player.setTranslateY(newY); //move player
-						playerY -= 1; //Change player's row index
+						//playerY -= 1; //Change player's row index
 					}
 				}
 				
@@ -259,23 +266,28 @@ public class Grid extends Application
 				if (e.getCode() == KeyCode.DOWN)
 				{	
 					//Check if movement is within grid bounds
-					if (playerY < (GRID_HEIGHT - 1))
-					{
-						double newY = currentY + TILE_SIZE; //New spot to move to
+					if (player.getTranslateY() >= (bottomBound))
+					{}
+					else{
+						System.out.println("Player's x is - " + player.getTranslateX());
+						System.out.println("Player's y is - " + player.getTranslateY());
+						System.out.println("Main scene's height is - " + mainScene.getHeight());
+						double newY = currentY + TILE_SIZE; //Determine spot to move to
 						player.setTranslateY(newY); //move player
-						playerY += 1; //Change player's row index
+						//playerY -= 1; //Change player's row index
 					}
 				}
+				
 				
 				//move left
 				if (e.getCode() == KeyCode.LEFT)
 				{	
 					//Check if movement is within grid bounds
-					if (playerX > 0)
+					//if (playerX > 0)
 					{
 						double newX = currentX - TILE_SIZE; //Spot to move to
 						player.setTranslateX(newX); //move player
-						playerX -= 1; //Change player's column index
+						//playerX -= 1; //Change player's column index
 					}
 				}
 				
@@ -283,11 +295,11 @@ public class Grid extends Application
 				if (e.getCode() == KeyCode.RIGHT)
 				{	
 					//Check if movement is within grid bounds
-					if (playerX < (GRID_WIDTH - 1))
+					//if (playerX < (GRID_WIDTH - 1))
 					{
 						double newX = currentX + TILE_SIZE; //Spot to move to
 						player.setTranslateX(newX); //move player
-						playerX += 1; //Change player's column index
+						//playerX += 1; //Change player's column index
 					}
 				}
 				
@@ -494,7 +506,9 @@ public class Grid extends Application
 						if(object.getBoundsInParent().intersects(player.getBoundsInParent()))
 						{
 							//Movement with collision
-							movePlayer(player, newPlayerX, newPlayerY);
+							//movePlayer(player, newPlayerX, newPlayerY);
+							hitOrRun = true;
+							movePlayer(player, object.getTranslateX(), object.getTranslateY());
 						}
 						
 						frame++;
@@ -537,32 +551,36 @@ public class Grid extends Application
 						if(object.getBoundsInParent().intersects(player.getBoundsInParent()))
 						{
 							//Movement with collision
-							movePlayer(player, newPlayerX, newPlayerY);
+							//movePlayer(player, newPlayerX, newPlayerY);
+							hitOrRun = true;
+							movePlayer(player, object.getTranslateX(), object.getTranslateY());	
 						}
-						
 						frame++;
 					}
 				}
 			}));
 		}
-		
 		//Determine whether the animation is indefinite
 		if (indefinite == true)
 		{
 			animation.setCycleCount(Timeline.INDEFINITE);
 		}
-		
 		return animation;
 	} //createTimeline
 	
 	//Method that will execute when the player collides with an object
 	public void movePlayer(Circle player, double newPlayerX, double newPlayerY)
 	{	
+		if (hitOrRun = true) {
 		//Set player position
 		player.setTranslateX(newPlayerX);
 		player.setTranslateY(newPlayerY);
+		}
+		
+		else {
 		playerX = (int)(GRID_WIDTH/2);
 		playerY = GRID_HEIGHT - 1;
+		}
 	} //movePlayer
 
 } //class
