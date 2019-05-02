@@ -4,8 +4,12 @@
  * Smoother animations
  */
 
-package application;
+//package application;
 
+import java.awt.Dimension;
+import java.awt.Toolkit;
+import java.io.File;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 
 import javafx.animation.KeyFrame;
@@ -16,12 +20,14 @@ import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
 import javafx.stage.Stage;
@@ -32,7 +38,7 @@ public class Grid extends Application
 	//Class constants & variables
 	
 	//SCALING ONLY WORKS WHEN GRID_WIDTH IS ODD & GRID_HEIGHT IS EVEN!
-	private final int GRID_WIDTH = 13; //Number of tiles in each row (13 default)			
+	private final int GRID_WIDTH = 19; //Number of tiles in each row (13 default)			
 	private final int GRID_HEIGHT = 14; //Number of tiles in each column (14 default)
 	private final double PADDING = 16; //Width of spacing around the grid
 	private final double WINDOW_WIDTH = 900; //width of the window
@@ -54,11 +60,17 @@ public class Grid extends Application
 	
 	//Start method
 	@Override
-	public void start(Stage mainStage) 
+	public void start(Stage mainStage) throws MalformedURLException 
 	{
 		mainStage.setWidth(WINDOW_WIDTH); //Set the width of the window, used to calculate grid tile size
 		
-		TILE_SIZE = (double)((int) ((mainStage.getWidth() - PADDING) / GRID_WIDTH)) ; //Calculate grid tile size
+		//Resize window to full screen size
+		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
+		mainStage.setWidth(screenSize.getWidth()); //Set the width of the window, used to calculate grid tile size
+		mainStage.setHeight(screenSize.getHeight());
+		int gameSceneWidth = (int) mainStage.getWidth() - 400;
+		
+		TILE_SIZE = (double)((int) ((gameSceneWidth - PADDING) / GRID_WIDTH)) ; //Calculate grid tile size
 		GRID_Y = TILE_SIZE * GRID_HEIGHT; //Calculate grid height measurement
 		PLAYER_SIZE = (TILE_SIZE - 5)/2; //Calculate size of the player sprite
 		OBJECT_SPAWN_DISTANCE = TILE_SIZE*1.5; //Calculate object spawn distance
@@ -69,9 +81,10 @@ public class Grid extends Application
 		LEFT_COLUMN = -RIGHT_COLUMN;
 		MIDDLE_COLUMN = 0;
 		
-		//Set player repsawn location
+		//Set player respawn location
 		RESPAWN_X = MIDDLE_COLUMN; //respawn column
 		RESPAWN_Y = BOTTOM_ROW; //respawn row
+		
 		
 		//generate game grid
 		ArrayList<ArrayList<Rectangle>> grid = gridGen(TILE_SIZE, GRID_WIDTH, GRID_HEIGHT);
@@ -241,13 +254,47 @@ public class Grid extends Application
 	} //start
 	
 	//Generate a 2d array list of squares to form a grid
-	public ArrayList<ArrayList<Rectangle>> gridGen(double tileSize, int gridWidth, int gridHeight) 
+	public ArrayList<ArrayList<Rectangle>> gridGen(double tileSize, int gridWidth, int gridHeight) throws MalformedURLException 
 	{		
 		ArrayList<ArrayList<Rectangle>> grid = new ArrayList<ArrayList<Rectangle>>(); //2d array list to hold rows
 		
 		//Coordinates of square being drawn
 		double x = 0;
 		double y = 0;
+		
+		File file = new File(System.getProperty("user.dir") + "/images/user-top-view.png"); 
+		File file1 = new File(System.getProperty("user.dir") + "/images/desktop.png");
+		File file2 = new File(System.getProperty("user.dir") + "/images/house-1.png");
+		File file3 = new File(System.getProperty("user.dir") + "/images/icetruck.png");
+		File file4 = new File(System.getProperty("user.dir") + "/images/thai.png");
+		File file5 = new File(System.getProperty("user.dir") + "/images/mcd.png");
+		File file6 = new File(System.getProperty("user.dir") + "/images/grass-1.png");
+		File file7 = new File(System.getProperty("user.dir") + "/images/desk.jpg");
+		String localUrl = file.toURI().toURL().toString();
+		String localUrl1 = file1.toURI().toURL().toString();
+		String localUrl2 = file2.toURI().toURL().toString();
+		String localUrl3 = file3.toURI().toURL().toString();
+		String localUrl4 = file4.toURI().toURL().toString();
+		String localUrl5 = file5.toURI().toURL().toString();
+		String localUrl6 = file6.toURI().toURL().toString();
+		String localUrl7 = file7.toURI().toURL().toString();
+		// don't load in the background
+		Image localImage = new Image(localUrl);
+		Image localImage1 = new Image(localUrl1);
+		Image localImage2 = new Image(localUrl2);
+		Image localImage3 = new Image(localUrl3);
+		Image localImage4 = new Image(localUrl4);
+		Image localImage5 = new Image(localUrl5);
+		Image localImage6 = new Image(localUrl6);
+		Image localImage7 = new Image(localUrl7);
+		ImagePattern pattern = new ImagePattern(localImage);
+		ImagePattern pattern1 = new ImagePattern(localImage1);
+		ImagePattern pattern2 = new ImagePattern(localImage2);
+		ImagePattern pattern3 = new ImagePattern(localImage3);
+		ImagePattern pattern4 = new ImagePattern(localImage4);
+		ImagePattern pattern5 = new ImagePattern(localImage5);
+		ImagePattern pattern6 = new ImagePattern(localImage6);
+		ImagePattern pattern7 = new ImagePattern(localImage7);
 		
 		for (int n = 0; n < gridHeight; n++) //1 iteration = 1 row
 		{
@@ -264,11 +311,26 @@ public class Grid extends Application
 				{
 					if (i % 2 != 0) //if column number is odd
 					{
-						if(n == 13 || n == 7 || n == 1) //if the row number is either 14, 8, or 2, color purple for safe space
+						
+						if(n == 13) //if the row number is either 14 or 8, color purple for safe space
 						{
-							gridRow.get(i).setFill(Color.PURPLE); //color rectangle at current index purple
+						gridRow.get(i).setFill(pattern6); //color rectangle at current index purple
 						}
-						else if (n >= 2 && n <= 6) //color rows 3-7 blue for water
+						else if(n == 7)
+							{
+								gridRow.get(i).setFill(pattern5);
+							}
+						else if (n == 1) //if the row number is 2, color purple for safe space
+						{
+							if (i == 1 || i == 5 || i == 9 || i == 13 || i ==17)
+								gridRow.get(i).setFill(pattern); //color rectangle at current index purple
+							else
+							{
+								gridRow.get(i).setFill(pattern7);
+							}
+						}
+						
+						else if (n == 3 && (i == 3 || i == 5)) //colors rectangles blue to show where moving object will be placed
 						{
 							gridRow.get(i).setFill(Color.BLUE); //colors rectangle blue
 						}
@@ -276,42 +338,45 @@ public class Grid extends Application
 							gridRow.get(i).setFill(Color.BLACK); //color rectangle at current index black
 						}
 					}
-					else if(n == 13 || n == 7 || n == 1) //if the row number is either 14, 8 or 2, color purple for safe space
+					else if(n == 13) //if the row number is either 14 or 8, color purple for safe space
 					{
-						gridRow.get(i).setFill(Color.PURPLE); //color rectangle at current index purple
+						gridRow.get(i).setFill(pattern2); //color rectangle at current index purple
 					}
-					else if (n >= 2 && n <= 6) //color rows 3-7 blue for water
+					else if(n == 1) //if the row number is 2, color purple for safe space
+					{
+						if (i % 2 != 0) //if the column number is even
+						gridRow.get(i).setFill(pattern2); //color rectangle at current index purple
+						else
+							gridRow.get(i).setFill(pattern7); //color rectangle at current index purple
+					}	
+					else if (n == 3 && (i == 4)) //colors rectangles blue to show where moving object will be placed
 					{
 						gridRow.get(i).setFill(Color.BLUE); //colors rectangle blue
 					}
 					else //if column number is even
 					{		
 						gridRow.get(i).setFill(Color.GREY); //color rectangle grey
+						if (n==7)
+							gridRow.get(i).setFill(pattern4);
 					}
 				}
 				else //if the row number is even
 				{
+		
+					
 					if (i % 2 != 0) //if the column number is even
 					{
 						if (n == 0) //if the row number is 1, color purple for safe space
 						{
-							gridRow.get(i).setFill(Color.PURPLE); //color rectangle purple
+						gridRow.get(i).setFill(pattern7); //color rectangle purple
 						}			
-						else if (n >= 2 && n <= 6) //color rows 3-7 blue for water
-						{
-							gridRow.get(i).setFill(Color.BLUE);
-						}
 						else {
 							gridRow.get(i).setFill(Color.GREY); //color rectangle grey
 						}
 					}
 					else if (n == 0) //if the row number is 1, color purple for safe space
 					{
-						gridRow.get(i).setFill(Color.PURPLE); //color rectangle purple
-					}
-					else if (n >= 2 && n <= 6) //color rows 3-7 blue for water
-					{
-						gridRow.get(i).setFill(Color.BLUE);
+						gridRow.get(i).setFill(pattern1); //color rectangle purple
 					}
 					else //if the column number is odd
 					{
