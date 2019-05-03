@@ -15,6 +15,7 @@ import java.util.ArrayList;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
+import javafx.animation.TranslateTransition;
 import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
@@ -53,6 +54,9 @@ public class Grid extends Application
 	private double BOTTOM_ROW, RIGHT_COLUMN, LEFT_COLUMN, MIDDLE_COLUMN; //Layout positions
 	private double RESPAWN_X, RESPAWN_Y; //Respawn position
 	boolean hitOrRun;
+	boolean isMoving = false;
+	
+	private TranslateTransition mover;
 	
 	//Main method
 	public static void main(String[] args)
@@ -115,6 +119,17 @@ public class Grid extends Application
 		player.setFill(Color.YELLOW);
 		player.setTranslateX(MIDDLE_COLUMN); //Player start X
 		player.setTranslateY(row(4)); //Player start Y
+		
+		mover = new TranslateTransition(Duration.millis(250), player);
+		//mover.setFromX(RESPAWN_X);
+		//mover.setFromY(RESPAWN_Y);
+		mover.setFromX(RESPAWN_X);
+		mover.setFromY(RESPAWN_Y);
+		
+		System.out.println("Mover X = " + mover.getFromX());
+		System.out.println("Mover Y = " + mover.getFromX());
+		System.out.println("Player X = " + player.getLayoutX());
+		System.out.println("Player Y = " + player.getLayoutY());
 		
 		/* OBJECTS WITH COLLISION */
 		
@@ -191,16 +206,20 @@ public class Grid extends Application
 		
 		/* EVENT LISTENERS */
 		
+		
+		
 		//Key press
 		mainScene.setOnKeyPressed(e -> 
 		{
 			//Player movement
-			if ((e.getCode() == KeyCode.UP) || e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.RIGHT)
+			double currentX = player.getTranslateX();
+			double currentY = player.getTranslateY();
+			if ((e.getCode() == KeyCode.UP || e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.RIGHT) && isMoving==false)
 			{
 				//Store location before moving
-				double currentX = player.getTranslateX();
-				double currentY = player.getTranslateY();
 				
+				mover.setFromX(currentX);
+				mover.setFromY(currentY);
 				//move up
 				if (e.getCode() == KeyCode.UP)
 				{
@@ -212,8 +231,17 @@ public class Grid extends Application
 					else 
 					{
 						double newY = currentY - TILE_SIZE; //Determine spot to move to
+						double newX = currentX; //Spot to move to
+						isMoving = true;
+						mover.setToY(newY);
+						mover.setToX(newX);
+						mover.play();
 						player.setTranslateY(newY); //move player
-						playerY -= 1; //Change player's row index
+						mover.setFromY(newY);
+						//playerY -= 1; //Change player's row index
+						System.out.println(currentY);
+						currentX = newX;
+						currentY = newY;
 					}
 				}
 				
@@ -226,8 +254,17 @@ public class Grid extends Application
 					else  
 					{
 						double newY = currentY + TILE_SIZE; //New spot to move to
+						double newX = currentX; //Spot to move to
+						isMoving = true;
+						mover.setToY(newY);
+						mover.setToX(newX);
+						mover.play();
 						player.setTranslateY(newY); //move player
-						playerY += 1; //Change player's row index
+						mover.setFromY(newY);
+						//playerY += 1; //Change player's row index
+						currentX = newX;
+						currentY = newY;
+						
 					}
 				}
 				
@@ -235,11 +272,22 @@ public class Grid extends Application
 				if (e.getCode() == KeyCode.LEFT)
 				{	
 					//Check if movement is within grid bounds
+					//System.out.println(player.getTranslateX() >= (leftSpawn+(2*TILE_SIZE)));
 					if (player.getTranslateX() >= (leftSpawn+(2*TILE_SIZE)))
 					{
 						double newX = currentX - TILE_SIZE; //Spot to move to
+						double newY = currentY; //Determine spot to move to
+						isMoving = true;
+						mover.setToX(newX);
+						mover.setToY(newY);
+						mover.play();
 						player.setTranslateX(newX); //move player
-						playerX -= 1; //Change player's column index
+						mover.setFromX(newX);
+						//playerX -= 1; //Change player's column index
+						System.out.println(currentX);
+						currentX = newX;
+						currentY = newY;
+						
 					}
 				}
 				
@@ -247,17 +295,35 @@ public class Grid extends Application
 				if (e.getCode() == KeyCode.RIGHT)
 				{	
 					//Check if movement is within grid bounds
+					//System.out.println(player.getTranslateX() <= (rightSpawn-(2*TILE_SIZE)));
 					if (player.getTranslateX() <= (rightSpawn-(2*TILE_SIZE)))
 					{
 						double newX = currentX + TILE_SIZE; //Spot to move to
+						double newY = currentY; //Determine spot to move to
+						isMoving = true;
+						mover.setToX(newX);
+						mover.setToY(newY);
+						mover.play();
 						player.setTranslateX(newX); //move player
-						playerX += 1; //Change player's column index
+						mover.setFromX(newX);
+						//playerX += 1; //Change player's column index
+						currentX = newX;
+						currentY = newY;
 					}
 				}
 				
 			} //player movement
 			
 		}); //key press event
+		
+		mover.setOnFinished(event->{
+			isMoving = false;
+			
+			//player.setTranslateY(player.getTranslateY()+TILE_SIZE);
+			//mover.setFromX(player.getTranslateX()+TILE_SIZE);
+			//mover.setFromY(player.getTranslateY()+TILE_SIZE);
+		});
+		
 		
 	} //start
 	
@@ -569,9 +635,11 @@ public class Grid extends Application
 			}
 			
 			else {
-			playerX = (int)(GRID_WIDTH/2);
-			playerY = GRID_HEIGHT - 1;
+			newPlayerX = (int)(GRID_WIDTH/2);
+			newPlayerY = GRID_HEIGHT - 1;
 			}
+		System.out.println("x = " + player.getTranslateX());
+		System.out.println("y = " + player.getTranslateY());
 	} //movePlayer
 
 } //class
