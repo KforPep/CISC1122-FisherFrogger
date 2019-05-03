@@ -21,6 +21,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
 import javafx.scene.layout.BorderPane;
@@ -31,8 +32,10 @@ import javafx.scene.paint.Color;
 import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
+import javafx.scene.text.Font;
 import javafx.stage.Stage;
 import javafx.util.Duration;
+import javafx.scene.text.TextAlignment;
 
 public class Grid extends Application
 {
@@ -52,6 +55,7 @@ public class Grid extends Application
 	private double OBJECT_SPAWN_DISTANCE; //distance moving objects will spawn away from the grid
 	private double BOTTOM_ROW, RIGHT_COLUMN, LEFT_COLUMN, MIDDLE_COLUMN; //Layout positions
 	private double RESPAWN_X, RESPAWN_Y; //Respawn position
+	private int lives = 3;
 	boolean hitOrRun;
 	
 	//Main method
@@ -109,10 +113,25 @@ public class Grid extends Application
 			vbxGrid.getChildren().add(row); //Add the row to the grid VBox
 		}
 		
+		//Applying Image Pattern to circles and rectangles
+		File file12 = new File(System.getProperty("user.dir") + "/images/player.png"); 
+		String localUrl12 = file12.toURI().toURL().toString();
+		Image localImage12 = new Image(localUrl12);
+		ImagePattern pattern12 = new ImagePattern(localImage12);
+		
+		File file8 = new File(System.getProperty("user.dir") + "/images/stackofbooks.jpg");
+		String localUrl8 = file8.toURI().toURL().toString();
+		Image localImage8 = new Image(localUrl8);
+		ImagePattern pattern8 = new ImagePattern(localImage8);
+		
+
+		
+		
+		
 		//Draw the player
 		Circle player = new Circle(PLAYER_SIZE);
 		
-		player.setFill(Color.YELLOW);
+		player.setFill(pattern12);
 		player.setTranslateX(MIDDLE_COLUMN); //Player start X
 		player.setTranslateY(row(4)); //Player start Y
 		
@@ -148,6 +167,8 @@ public class Grid extends Application
 		stack.getChildren().add(vbxGrid); //Add game grid to stack pane
 		stack.getChildren().add(player); //Add player to stack pane
 		
+		
+
 		//Add the arrays of moving objects on to the stack pane
 		car1.toPane(stack); //Cars 1 (row 2)
 		car2.toPane(stack); //Cars 2 (row 3)
@@ -176,6 +197,15 @@ public class Grid extends Application
 		mainStage.setTitle("Class Simulator");
 		mainStage.setScene(mainScene);
 		mainStage.show();
+		
+		
+		//Add lives label
+		Label livesLabel = new Label("Lives: " + lives);
+		livesLabel.setFont(Font.font(50.0));
+		livesLabel.setTextFill(Color.WHITE);
+		pane.setTop(livesLabel);
+		livesLabel.setAlignment(Pos.TOP_CENTER);
+		
 		
 		/* OBJECT ANIMATIONS */
 		
@@ -303,6 +333,7 @@ public class Grid extends Application
 		ImagePattern pattern5 = new ImagePattern(localImage5);
 		ImagePattern pattern6 = new ImagePattern(localImage6);
 		ImagePattern pattern7 = new ImagePattern(localImage7);
+		
 		
 		for (int n = 0; n < gridHeight; n++) //1 iteration = 1 row
 		{
@@ -476,7 +507,9 @@ public class Grid extends Application
 							if (object.carry == false) //if the object does NOT carry player
 							{
 								hitOrRun = false;
-								movePlayer(player, RESPAWN_X, RESPAWN_Y);
+								playerRespawn respawn = new playerRespawn();
+								respawn.loseLife();
+								respawn.Respawn(player);
 							}
 							else
 							{

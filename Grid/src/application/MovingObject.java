@@ -1,11 +1,9 @@
 package application;
 
-
 import java.util.ArrayList;
 
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
-
 import javafx.scene.shape.Rectangle;
 
 public class MovingObject extends Rectangle
@@ -21,7 +19,6 @@ public class MovingObject extends Rectangle
 	public double y = 0;
 	public Color color = Color.BLACK;
 	String animType = "";
-
 	public boolean infiniteAnim = true; //infinite animation?
 	public boolean carry = false; //will the moving object carry the player?
 	ArrayList<MovingObject> array;
@@ -88,5 +85,4 @@ public class MovingObject extends Rectangle
 		}
 	} //toPane
 	
-
 } //class
