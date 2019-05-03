@@ -1,11 +1,10 @@
 package application;
+
 /* TO-DO:
  * Prevent diagonal movement?
  * Movement of player on moving objects
  * Smoother animations
  */
-
-//package application;
 
 import java.awt.Dimension;
 import java.awt.Toolkit;
@@ -44,14 +43,12 @@ public class Grid extends Application
 	private final double PADDING = 16; //Width of spacing around the grid
 	private final double WINDOW_WIDTH = 900; //width of the window
 	
-	private int playerY = GRID_HEIGHT - 1; //Index of player row
-	private int playerX = (int)(GRID_WIDTH/2); //Index of player column
 	private double TILE_SIZE; //Size of the tile, calculated on launch
 	private double GRID_Y; //Grid height measurement
 	private double PLAYER_SIZE; //Size of player object
 	private double OBJECT_SPAWN_DISTANCE; //distance moving objects will spawn away from the grid
 	private double BOTTOM_ROW, RIGHT_COLUMN, LEFT_COLUMN, MIDDLE_COLUMN; //Layout positions
-	private double RESPAWN_X, RESPAWN_Y; //Respawn position
+	private double SPAWN_X, SPAWN_Y; //(Re)spawn position
 	boolean hitOrRun;
 	
 	//Main method
@@ -84,8 +81,8 @@ public class Grid extends Application
 		MIDDLE_COLUMN = 0;
 		
 		//Set player respawn location
-		RESPAWN_X = MIDDLE_COLUMN; //respawn column
-		RESPAWN_Y = row(4); //respawn row
+		SPAWN_X = MIDDLE_COLUMN; //respawn column
+		SPAWN_Y = row(4); //respawn row
 		
 		
 		//generate game grid
@@ -110,11 +107,9 @@ public class Grid extends Application
 		}
 		
 		//Draw the player
-		Circle player = new Circle(PLAYER_SIZE);
 		
-		player.setFill(Color.YELLOW);
-		player.setTranslateX(MIDDLE_COLUMN); //Player start X
-		player.setTranslateY(row(4)); //Player start Y
+		//Player(X position, Y position, radius, color)
+		Player player = new Player(SPAWN_X, SPAWN_Y, PLAYER_SIZE, Color.YELLOW);
 		
 		/* OBJECTS WITH COLLISION */
 		
@@ -213,7 +208,6 @@ public class Grid extends Application
 					{
 						double newY = currentY - TILE_SIZE; //Determine spot to move to
 						player.setTranslateY(newY); //move player
-						playerY -= 1; //Change player's row index
 					}
 				}
 				
@@ -227,7 +221,6 @@ public class Grid extends Application
 					{
 						double newY = currentY + TILE_SIZE; //New spot to move to
 						player.setTranslateY(newY); //move player
-						playerY += 1; //Change player's row index
 					}
 				}
 				
@@ -239,7 +232,6 @@ public class Grid extends Application
 					{
 						double newX = currentX - TILE_SIZE; //Spot to move to
 						player.setTranslateX(newX); //move player
-						playerX -= 1; //Change player's column index
 					}
 				}
 				
@@ -251,7 +243,6 @@ public class Grid extends Application
 					{
 						double newX = currentX + TILE_SIZE; //Spot to move to
 						player.setTranslateX(newX); //move player
-						playerX += 1; //Change player's column index
 					}
 				}
 				
@@ -409,7 +400,7 @@ public class Grid extends Application
 	} //row
 	
 	//Create an animation for an array list of rectangles
-	public void animateRectangles(MovingObject obj, Circle player, StackPane stack)
+	public void animateRectangles(MovingObject obj, Player player, StackPane stack)
 	{
 		try
 		{
@@ -428,7 +419,7 @@ public class Grid extends Application
 	} //animateRectangles
 	
 	//Create a timeline animation
-	public Timeline createTimeline(String animationType, MovingObject object, Circle player, Bounds paneBounds,
+	public Timeline createTimeline(String animationType, MovingObject object, Player player, Bounds paneBounds,
 									int delay, int speedMillis, int xVelocity, int startDelay, boolean indefinite)
 	{
 		Timeline animation = null;
@@ -476,13 +467,13 @@ public class Grid extends Application
 							if (object.carry == false) //if the object does NOT carry player
 							{
 								hitOrRun = false;
-								movePlayer(player, RESPAWN_X, RESPAWN_Y);
+								player.move(SPAWN_X, SPAWN_Y);
 							}
 							else
 							{
 								//carry player
 								hitOrRun = true;
-								movePlayer(player, object.getTranslateX(), object.getTranslateY());
+								player.move(object.getTranslateX(), object.getTranslateY());
 							}
 						}
 						
@@ -533,13 +524,13 @@ public class Grid extends Application
 							if (object.carry == false) //if the object does NOT carry player
 							{
 								hitOrRun = false;
-								movePlayer(player, RESPAWN_X, RESPAWN_Y);
+								player.move(SPAWN_X, SPAWN_Y);
 							}
 							else
 							{
 								//carry player
 								hitOrRun = true;
-								movePlayer(player, object.getTranslateX(), object.getTranslateY());
+								player.move(object.getTranslateX(), object.getTranslateY());
 							}
 						}
 						
@@ -557,21 +548,4 @@ public class Grid extends Application
 		
 		return animation;
 	} //createTimeline
-	
-	//Method that will execute when the player collides with an object
-	public void movePlayer(Circle player, double newPlayerX, double newPlayerY)
-	{	
-		
-		if (hitOrRun = true) {
-			//Set player position
-			player.setTranslateX(newPlayerX);
-			player.setTranslateY(newPlayerY);
-			}
-			
-			else {
-			playerX = (int)(GRID_WIDTH/2);
-			playerY = GRID_HEIGHT - 1;
-			}
-	} //movePlayer
-
 } //class
