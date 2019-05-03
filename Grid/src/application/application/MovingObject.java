@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
+import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Rectangle;
 
 public class MovingObject extends Rectangle
@@ -17,7 +18,7 @@ public class MovingObject extends Rectangle
 	public double height = 0;
 	public double x = 0;
 	public double y = 0;
-	public Color color = Color.BLACK;
+	public ImagePattern color;
 	String animType = "";
 	public boolean infiniteAnim = true; //infinite animation?
 	public boolean carry; //will the moving object carry the player?
@@ -29,7 +30,7 @@ public class MovingObject extends Rectangle
 	}
 	
 	public MovingObject(int objCount, int objSpace, int objSpeed, int objVelocity, double objWidth, double objHeight,
-								double objX, double objY, Color objColor, String objAnimType, boolean objWillCarry)
+								double objX, double objY, ImagePattern objColor, String objAnimType, boolean objWillCarry)
 	{
 		count = objCount;
 		space = objSpace;
@@ -55,7 +56,7 @@ public class MovingObject extends Rectangle
 		double objX = x;
 		double objY = y;
 		boolean objCarry = carry;
-		Color objColor = color;
+		ImagePattern objColor = color;
 		
 		for (int i = 0; i < objCount; i++)
 		{
