@@ -15,6 +15,7 @@ import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
 import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.Background;
 import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
@@ -48,6 +49,9 @@ public class Grid
 	boolean isMoving = false;
 	
 	private TranslateTransition mover;
+	Circle player;
+	double leftSpawn;
+	double rightSpawn;
 	
 	//Start method
 	public Pane start(double d) throws MalformedURLException 
@@ -94,7 +98,7 @@ public class Grid
 		}
 		
 		//Draw the player
-		Circle player = new Circle(PLAYER_SIZE);
+		player = new Circle(PLAYER_SIZE);
 		
 		player.setFill(Color.YELLOW);
 		player.setTranslateX(MIDDLE_COLUMN); //Player start X
@@ -113,8 +117,8 @@ public class Grid
 		
 		/* OBJECTS WITH COLLISION */
 		
-		double rightSpawn = RIGHT_COLUMN + OBJECT_SPAWN_DISTANCE;
-		double leftSpawn = LEFT_COLUMN - OBJECT_SPAWN_DISTANCE;
+		rightSpawn = RIGHT_COLUMN + OBJECT_SPAWN_DISTANCE;
+		leftSpawn = LEFT_COLUMN - OBJECT_SPAWN_DISTANCE;
 		double defaultSize = TILE_SIZE - 10;
 		double logHeight = TILE_SIZE - 15;
 		Color logColor = Color.SADDLEBROWN;
@@ -172,118 +176,6 @@ public class Grid
 		animateRectangles(log1, player, stack); //Logs 1 (row 9)
 		animateRectangles(log2, player, stack); //Logs 2 (row 10)
 		animateRectangles(log3, player, stack); //Logs 3 (row 12)
-		
-		/* EVENT LISTENERS */
-		
-		
-		
-		//Key press
-		gamePane.setOnKeyPressed(e -> 
-		{
-			//Player movement
-			double currentX = player.getTranslateX();
-			double currentY = player.getTranslateY();
-			if ((e.getCode() == KeyCode.UP || e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.RIGHT) && isMoving==false)
-			{
-				//Store location before moving
-				
-				mover.setFromX(currentX);
-				mover.setFromY(currentY);
-				//move up
-				if (e.getCode() == KeyCode.UP)
-				{
-					//Check if movement is within the bounds of grid
-					//if (playerY > 0)
-					//System.out.println("Player's y is - " + player.getTranslateY());
-					if (player.getTranslateY() <= (row(16)))
-					{}
-					else 
-					{
-						double newY = currentY - TILE_SIZE; //Determine spot to move to
-						double newX = currentX; //Spot to move to
-						isMoving = true;
-						mover.setToY(newY);
-						mover.setToX(newX);
-						mover.play();
-						player.setTranslateY(newY); //move player
-						mover.setFromY(newY);
-						//playerY -= 1; //Change player's row index
-						System.out.println(currentY);
-						currentX = newX;
-						currentY = newY;
-					}
-				}
-				
-				//move down
-				if (e.getCode() == KeyCode.DOWN)
-				{	
-					//Check if movement is within grid bounds
-					if (player.getTranslateY() >= (row(4)))
-					{}
-					else  
-					{
-						double newY = currentY + TILE_SIZE; //New spot to move to
-						double newX = currentX; //Spot to move to
-						isMoving = true;
-						mover.setToY(newY);
-						mover.setToX(newX);
-						mover.play();
-						player.setTranslateY(newY); //move player
-						mover.setFromY(newY);
-						//playerY += 1; //Change player's row index
-						currentX = newX;
-						currentY = newY;
-						
-					}
-				}
-				
-				//move left
-				if (e.getCode() == KeyCode.LEFT)
-				{	
-					//Check if movement is within grid bounds
-					//System.out.println(player.getTranslateX() >= (leftSpawn+(2*TILE_SIZE)));
-					if (player.getTranslateX() >= (leftSpawn+(2*TILE_SIZE)))
-					{
-						double newX = currentX - TILE_SIZE; //Spot to move to
-						double newY = currentY; //Determine spot to move to
-						isMoving = true;
-						mover.setToX(newX);
-						mover.setToY(newY);
-						mover.play();
-						player.setTranslateX(newX); //move player
-						mover.setFromX(newX);
-						//playerX -= 1; //Change player's column index
-						System.out.println(currentX);
-						currentX = newX;
-						currentY = newY;
-						
-					}
-				}
-				
-				//move right
-				if (e.getCode() == KeyCode.RIGHT)
-				{	
-					//Check if movement is within grid bounds
-					//System.out.println(player.getTranslateX() <= (rightSpawn-(2*TILE_SIZE)));
-					if (player.getTranslateX() <= (rightSpawn-(2*TILE_SIZE)))
-					{
-						double newX = currentX + TILE_SIZE; //Spot to move to
-						double newY = currentY; //Determine spot to move to
-						isMoving = true;
-						mover.setToX(newX);
-						mover.setToY(newY);
-						mover.play();
-						player.setTranslateX(newX); //move player
-						mover.setFromX(newX);
-						//playerX += 1; //Change player's column index
-						currentX = newX;
-						currentY = newY;
-					}
-				}
-				
-			} //player movement
-			
-		}); //key press event
 		
 		mover.setOnFinished(event->{
 			isMoving = false;
@@ -472,5 +364,112 @@ public class Grid
 		System.out.println("x = " + player.getTranslateX());
 		System.out.println("y = " + player.getTranslateY());
 	} //movePlayer
+	
+	public void sendKeyEvent(KeyEvent e)
+	{
+		//Player movement
+		double currentX = player.getTranslateX();
+		double currentY = player.getTranslateY();
+		if ((e.getCode() == KeyCode.UP || e.getCode() == KeyCode.DOWN || e.getCode() == KeyCode.LEFT || e.getCode() == KeyCode.RIGHT) && isMoving==false)
+		{
+			//Store location before moving
+			
+			mover.setFromX(currentX);
+			mover.setFromY(currentY);
+			//move up
+			if (e.getCode() == KeyCode.UP)
+			{
+				//Check if movement is within the bounds of grid
+				//if (playerY > 0)
+				//System.out.println("Player's y is - " + player.getTranslateY());
+				if (player.getTranslateY() <= (row(16)))
+				{}
+				else 
+				{
+					double newY = currentY - TILE_SIZE; //Determine spot to move to
+					double newX = currentX; //Spot to move to
+					isMoving = true;
+					mover.setToY(newY);
+					mover.setToX(newX);
+					mover.play();
+					player.setTranslateY(newY); //move player
+					mover.setFromY(newY);
+					//playerY -= 1; //Change player's row index
+					System.out.println(currentY);
+					currentX = newX;
+					currentY = newY;
+				}
+			}
+			
+			//move down
+			if (e.getCode() == KeyCode.DOWN)
+			{	
+				//Check if movement is within grid bounds
+				if (player.getTranslateY() >= (row(4)))
+				{}
+				else  
+				{
+					double newY = currentY + TILE_SIZE; //New spot to move to
+					double newX = currentX; //Spot to move to
+					isMoving = true;
+					mover.setToY(newY);
+					mover.setToX(newX);
+					mover.play();
+					player.setTranslateY(newY); //move player
+					mover.setFromY(newY);
+					//playerY += 1; //Change player's row index
+					currentX = newX;
+					currentY = newY;
+					
+				}
+			}
+			
+			//move left
+			if (e.getCode() == KeyCode.LEFT)
+			{	
+				//Check if movement is within grid bounds
+				//System.out.println(player.getTranslateX() >= (leftSpawn+(2*TILE_SIZE)));
+				if (player.getTranslateX() >= (leftSpawn+(2*TILE_SIZE)))
+				{
+					double newX = currentX - TILE_SIZE; //Spot to move to
+					double newY = currentY; //Determine spot to move to
+					isMoving = true;
+					mover.setToX(newX);
+					mover.setToY(newY);
+					mover.play();
+					player.setTranslateX(newX); //move player
+					mover.setFromX(newX);
+					//playerX -= 1; //Change player's column index
+					System.out.println(currentX);
+					currentX = newX;
+					currentY = newY;
+					
+				}
+			}
+			
+			//move right
+			if (e.getCode() == KeyCode.RIGHT)
+			{	
+				//Check if movement is within grid bounds
+				//System.out.println(player.getTranslateX() <= (rightSpawn-(2*TILE_SIZE)));
+				if (player.getTranslateX() <= (rightSpawn-(2*TILE_SIZE)))
+				{
+					double newX = currentX + TILE_SIZE; //Spot to move to
+					double newY = currentY; //Determine spot to move to
+					isMoving = true;
+					mover.setToX(newX);
+					mover.setToY(newY);
+					mover.play();
+					player.setTranslateX(newX); //move player
+					mover.setFromX(newX);
+					//playerX += 1; //Change player's column index
+					currentX = newX;
+					currentY = newY;
+				}
+			}
+			
+		} //player movement
+		
+	}
 
 } //class

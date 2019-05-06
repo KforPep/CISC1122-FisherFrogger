@@ -1,7 +1,10 @@
-	
+/**
+ * This class is the main window. It handles key press events
+ * and send them to the Grid.
+ */
+
 import java.awt.Dimension;
 import java.awt.Toolkit;
-
 
 import javafx.application.Application;
 import javafx.stage.Stage;
@@ -12,12 +15,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.paint.Color;
 
-public class Main extends Application {
+public class Main extends Application{
 	
 	/***
 	 * This class opens and controls the window.
 	 * It shows the scene from Grid inside of it
 	 */
+	
 	@Override
 	public void start(Stage mainStage) {
 		try {
@@ -45,6 +49,10 @@ public class Main extends Application {
 			totalScreen.setLeft(leftSideCover);
 			
 			Scene scene = new Scene(totalScreen);
+			scene.setOnKeyPressed(e -> 
+			{
+				gameGrid.sendKeyEvent(e);
+			});
 			
 			mainStage.setTitle("Class Simulator");
 			mainStage.setScene(scene);
