@@ -1,41 +1,33 @@
-//package application;
 /* TO-DO:
  * Prevent diagonal movement?
  * Movement of player on moving objects
  * Smoother animations
  */
 
-//package application;
-
-import java.awt.Dimension;
-import java.awt.Toolkit;
-import java.io.File;
 import java.net.MalformedURLException;
 import java.util.ArrayList;
 
 import javafx.animation.KeyFrame;
 import javafx.animation.Timeline;
 import javafx.animation.TranslateTransition;
-import javafx.application.Application;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.geometry.Bounds;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
-import javafx.scene.image.Image;
 import javafx.scene.input.KeyCode;
+import javafx.scene.layout.Background;
+import javafx.scene.layout.BackgroundFill;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
-import javafx.scene.paint.ImagePattern;
 import javafx.scene.shape.Circle;
 import javafx.scene.shape.Rectangle;
-import javafx.stage.Stage;
 import javafx.util.Duration;
 
-public class Grid extends Application
+public class Grid
 {
 	//Class constants & variables
 	
@@ -43,7 +35,6 @@ public class Grid extends Application
 	private final int GRID_WIDTH = 19; //Number of tiles in each row (13 default)			
 	private final int GRID_HEIGHT = 14; //Number of tiles in each column (14 default)
 	private final double PADDING = 16; //Width of spacing around the grid
-	private final double WINDOW_WIDTH = 900; //width of the window
 	
 	private int playerY = GRID_HEIGHT - 1; //Index of player row
 	private int playerX = (int)(GRID_WIDTH/2); //Index of player column
@@ -58,23 +49,12 @@ public class Grid extends Application
 	
 	private TranslateTransition mover;
 	
-	//Main method
-	public static void main(String[] args)
-	{
-		launch(args);
-	} //main
-	
 	//Start method
-	@Override
-	public void start(Stage mainStage) throws MalformedURLException 
+	public Pane start(double d) throws MalformedURLException 
 	{
-		mainStage.setWidth(WINDOW_WIDTH); //Set the width of the window, used to calculate grid tile size
-		
-		//Resize window to full screen size
-		Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-		mainStage.setWidth(screenSize.getWidth()); //Set the width of the window, used to calculate grid tile size
-		mainStage.setHeight(screenSize.getHeight());
-		int gameSceneWidth = (int) mainStage.getWidth() - 800;
+		Pane gamePane = new Pane();
+		gamePane.setBackground(new Background(new BackgroundFill(Color.GREEN, null, null)));
+		int gameSceneWidth = (int) d; // All blocks are square so height and width are equal
 		
 		TILE_SIZE = (double)((int) ((gameSceneWidth - PADDING) / GRID_WIDTH)) ; //Calculate grid tile size
 		GRID_Y = TILE_SIZE * GRID_HEIGHT; //Calculate grid height measurement
@@ -91,9 +71,9 @@ public class Grid extends Application
 		RESPAWN_X = MIDDLE_COLUMN; //respawn column
 		RESPAWN_Y = row(4); //respawn row
 		
-		
 		//generate game grid
-		ArrayList<ArrayList<Rectangle>> grid = gridGen(TILE_SIZE, GRID_WIDTH, GRID_HEIGHT);
+		GridGen backgroundGrid = new GridGen();
+		ArrayList<ArrayList<Rectangle>> grid = backgroundGrid.gridGen(TILE_SIZE, GRID_WIDTH, GRID_HEIGHT);
 		
 		//Create a VBox to hold the grid
 		VBox vbxGrid = new VBox();
@@ -180,18 +160,7 @@ public class Grid extends Application
 		
 		//Border pane to hold the stack pane
 		BorderPane pane = new BorderPane(stack);
-		
-		//Scene
-		Scene mainScene = new Scene(pane, WINDOW_WIDTH, GRID_Y + PADDING);
-		
-		mainScene.getStylesheets().add("style.css"); //import style sheet
-		
-		//Stage
-		//mainStage.setResizable(false);
-		mainStage.setTitle("Class Simulator");
-		mainStage.setScene(mainScene);
-		mainStage.show();
-		
+
 		/* OBJECT ANIMATIONS */
 		
 		//Create and start animations
@@ -209,7 +178,7 @@ public class Grid extends Application
 		
 		
 		//Key press
-		mainScene.setOnKeyPressed(e -> 
+		gamePane.setOnKeyPressed(e -> 
 		{
 			//Player movement
 			double currentX = player.getTranslateX();
@@ -324,147 +293,9 @@ public class Grid extends Application
 			//mover.setFromY(player.getTranslateY()+TILE_SIZE);
 		});
 		
-		
+		gamePane.getChildren().addAll(pane);
+		return gamePane;
 	} //start
-	
-	//Generate a 2d array list of squares to form a grid
-	public ArrayList<ArrayList<Rectangle>> gridGen(double tileSize, int gridWidth, int gridHeight) throws MalformedURLException 
-	{		
-		ArrayList<ArrayList<Rectangle>> grid = new ArrayList<ArrayList<Rectangle>>(); //2d array list to hold rows
-		
-		//Coordinates of square being drawn
-		double x = 0;
-		double y = 0;
-		
-		File file = new File(System.getProperty("user.dir") + "/images/user-top-view.png"); 
-		File file1 = new File(System.getProperty("user.dir") + "/images/desktop.png");
-		File file2 = new File(System.getProperty("user.dir") + "/images/house-1.png");
-		File file3 = new File(System.getProperty("user.dir") + "/images/icetruck.png");
-		File file4 = new File(System.getProperty("user.dir") + "/images/thai.png");
-		File file5 = new File(System.getProperty("user.dir") + "/images/mcd.png");
-		File file6 = new File(System.getProperty("user.dir") + "/images/grass-1.png");
-		File file7 = new File(System.getProperty("user.dir") + "/images/desk.jpg");
-		String localUrl = file.toURI().toURL().toString();
-		String localUrl1 = file1.toURI().toURL().toString();
-		String localUrl2 = file2.toURI().toURL().toString();
-		String localUrl3 = file3.toURI().toURL().toString();
-		String localUrl4 = file4.toURI().toURL().toString();
-		String localUrl5 = file5.toURI().toURL().toString();
-		String localUrl6 = file6.toURI().toURL().toString();
-		String localUrl7 = file7.toURI().toURL().toString();
-		// don't load in the background
-		Image localImage = new Image(localUrl);
-		Image localImage1 = new Image(localUrl1);
-		Image localImage2 = new Image(localUrl2);
-		Image localImage3 = new Image(localUrl3);
-		Image localImage4 = new Image(localUrl4);
-		Image localImage5 = new Image(localUrl5);
-		Image localImage6 = new Image(localUrl6);
-		Image localImage7 = new Image(localUrl7);
-		ImagePattern pattern = new ImagePattern(localImage);
-		ImagePattern pattern1 = new ImagePattern(localImage1);
-		ImagePattern pattern2 = new ImagePattern(localImage2);
-		ImagePattern pattern3 = new ImagePattern(localImage3);
-		ImagePattern pattern4 = new ImagePattern(localImage4);
-		ImagePattern pattern5 = new ImagePattern(localImage5);
-		ImagePattern pattern6 = new ImagePattern(localImage6);
-		ImagePattern pattern7 = new ImagePattern(localImage7);
-		
-		for (int n = 0; n < gridHeight; n++) //1 iteration = 1 row
-		{
-			ArrayList<Rectangle> gridRow = new ArrayList<Rectangle>(gridWidth); //Array list to hold squares in each row
-			x = 0; //Reset X location of squares to 0
-			
-			for (int i = 0; i < gridWidth; i++) //fill row with squares
-			{
-				gridRow.add(new Rectangle(x, y, tileSize, tileSize)); //Create a square at the current index
-				x += tileSize; //Set the X location of the next square
-				
-				//Color the square
-				if (n % 2 != 0) //if the row number is odd
-				{
-					if (i % 2 != 0) //if column number is odd
-					{
-						
-						if(n == 13) //if the row number is either 14 or 8, color purple for safe space
-						{
-						gridRow.get(i).setFill(pattern6); //color rectangle at current index purple
-						}
-						else if(n == 7)
-							{
-								gridRow.get(i).setFill(pattern5);
-							}
-						else if (n == 1) //if the row number is 2, color purple for safe space
-						{
-							if (i == 1 || i == 5 || i == 9 || i == 13 || i ==17)
-								gridRow.get(i).setFill(pattern); //color rectangle at current index purple
-							else
-							{
-								gridRow.get(i).setFill(pattern7);
-							}
-						}
-						
-						else if (n == 3 && (i == 3 || i == 5)) //colors rectangles blue to show where moving object will be placed
-						{
-							gridRow.get(i).setFill(Color.BLUE); //colors rectangle blue
-						}
-						else {
-							gridRow.get(i).setFill(Color.BLACK); //color rectangle at current index black
-						}
-					}
-					else if(n == 13) //if the row number is either 14 or 8, color purple for safe space
-					{
-						gridRow.get(i).setFill(pattern2); //color rectangle at current index purple
-					}
-					else if(n == 1) //if the row number is 2, color purple for safe space
-					{
-						if (i % 2 != 0) //if the column number is even
-						gridRow.get(i).setFill(pattern2); //color rectangle at current index purple
-						else
-							gridRow.get(i).setFill(pattern7); //color rectangle at current index purple
-					}	
-					else if (n == 3 && (i == 4)) //colors rectangles blue to show where moving object will be placed
-					{
-						gridRow.get(i).setFill(Color.BLUE); //colors rectangle blue
-					}
-					else //if column number is even
-					{		
-						gridRow.get(i).setFill(Color.GREY); //color rectangle grey
-						if (n==7)
-							gridRow.get(i).setFill(pattern4);
-					}
-				}
-				else //if the row number is even
-				{
-		
-					
-					if (i % 2 != 0) //if the column number is even
-					{
-						if (n == 0) //if the row number is 1, color purple for safe space
-						{
-						gridRow.get(i).setFill(pattern7); //color rectangle purple
-						}			
-						else {
-							gridRow.get(i).setFill(Color.GREY); //color rectangle grey
-						}
-					}
-					else if (n == 0) //if the row number is 1, color purple for safe space
-					{
-						gridRow.get(i).setFill(pattern1); //color rectangle purple
-					}
-					else //if the column number is odd
-					{
-						gridRow.get(i).setFill(Color.BLACK); //color rectangle black
-					}
-				}
-			}
-			
-			grid.add(gridRow); //add the row to the grid
-			y += tileSize; //set y coordinate of next row
-		}
-		
-		return grid;
-	} //gridGen
 	
 	//Return the coordinates of a row
 	public double row(int rowNumber)
