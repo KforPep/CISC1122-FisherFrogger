@@ -52,6 +52,7 @@ public class Grid
 	Circle player;
 	double leftSpawn;
 	double rightSpawn;
+	GridGen backgroundGrid;
 	
 	//Start method
 	public Pane start(double d) throws MalformedURLException 
@@ -76,7 +77,7 @@ public class Grid
 		RESPAWN_Y = row(4); //respawn row
 		
 		//generate game grid
-		GridGen backgroundGrid = new GridGen();
+		backgroundGrid = new GridGen();
 		ArrayList<ArrayList<Rectangle>> grid = backgroundGrid.gridGen(TILE_SIZE, GRID_WIDTH, GRID_HEIGHT);
 		
 		//Create a VBox to hold the grid
@@ -470,6 +471,12 @@ public class Grid
 			
 		} //player movement
 		
+	}
+	
+	// returns the game window size for proper sizing in Main
+	public int getGameSize()
+	{
+		return (int) (GRID_WIDTH * TILE_SIZE);
 	}
 
 } //class

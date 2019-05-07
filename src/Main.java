@@ -7,6 +7,8 @@ import java.awt.Dimension;
 import java.awt.Toolkit;
 
 import javafx.application.Application;
+import javafx.beans.value.ChangeListener;
+import javafx.geometry.Pos;
 import javafx.stage.Stage;
 import javafx.scene.Scene;
 import javafx.scene.layout.Background;
@@ -22,6 +24,7 @@ public class Main extends Application{
 	 * It shows the scene from Grid inside of it
 	 */
 	
+	@SuppressWarnings("static-access")
 	@Override
 	public void start(Stage mainStage) {
 		try {
@@ -62,6 +65,19 @@ public class Main extends Application{
 			mainStage.setTitle("Class Simulator");
 			mainStage.setScene(scene);
 			mainStage.show();
+			
+			// Handles window size changes and resizes the leftSideCover and rightSideCover
+			// without changing the game play region
+			ChangeListener<Number> stageSizeListener = (observable, oldValue, newValue) ->
+			{
+				leftSideCover.setMaxSize(((mainStage.getWidth() - gameGrid.getGameSize())/2), mainStage.getHeight());
+				leftSideCover.setMinSize(((mainStage.getWidth() - gameGrid.getGameSize())/2), mainStage.getHeight());
+				rightSideCover.setMaxSize(((mainStage.getWidth() - gameGrid.getGameSize())/2), mainStage.getHeight());
+				rightSideCover.setMinSize(((mainStage.getWidth() - gameGrid.getGameSize())/2), mainStage.getHeight());
+			};
+
+		    mainStage.widthProperty().addListener(stageSizeListener);
+		    mainStage.heightProperty().addListener(stageSizeListener); 
 			
 		} catch(Exception e) {
 			e.printStackTrace();
