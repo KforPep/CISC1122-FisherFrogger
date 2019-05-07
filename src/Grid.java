@@ -126,22 +126,26 @@ public class Grid
 		
 		//MovingObject(count, space, speed, velocity, width, height, startX, startY, color, animation type, carry player?)
 		
-		//Cars 1 (row 2)
+		//Cars 1 (row 5)
 		MovingObject car1 = new MovingObject(3, 50, 60, 5, defaultSize, defaultSize, rightSpawn, row(5), Color.YELLOW, "LEFT", false);
-		//Cars 2 (row 3)
+		//Cars 2 (row 6)
 		MovingObject car2 = new MovingObject(3, 50, 55, 5, defaultSize, defaultSize, leftSpawn, row(6), Color.ORANGERED, "RIGHT", false);
-		//Cars 3 (row 4)
+		//Cars 3 (row 7)
 		MovingObject car3 = new MovingObject(3, 60, 35, 5, defaultSize + 15, defaultSize, rightSpawn, row(7), Color.MEDIUMPURPLE, "LEFT", false);
-		//Cars 4 (row 5)
+		//Cars 4 (row 8)
 		MovingObject car4 = new MovingObject(2, 125, 30, 5, defaultSize + 30, defaultSize - 5, leftSpawn, row(8), Color.LAWNGREEN, "RIGHT", false);
-		//Trucks (row 6)
+		//Trucks (row 9)
 		MovingObject truck = new MovingObject(2, 75, 45, 5, (TILE_SIZE*2) - 10, defaultSize, rightSpawn, row(9), Color.ANTIQUEWHITE, "LEFT", false);
-		//Logs 1 (row 9)
-		MovingObject log1 = new MovingObject(3, 85, 55, 5, (TILE_SIZE*2), logHeight, leftSpawn, row(12), logColor, "RIGHT", true);
-		//Logs 2 (row 10)
-		MovingObject log2 = new MovingObject(2, 125, 30, 5, (TILE_SIZE*4), logHeight, leftSpawn-75, row(13), logColor, "RIGHT", true);
-		//Logs 3 (row 12)
-		MovingObject log3 = new MovingObject(2, 65, 55, 5, (TILE_SIZE*3), logHeight, leftSpawn-75, row(14), logColor, "RIGHT", true);
+		//Logs 2 (row 12)
+		MovingObject log1 = new MovingObject(3, 85, 55, 5, (TILE_SIZE*2), logHeight, leftSpawn, row(11), logColor, "RIGHT", true);
+		//Logs 2 (row 12)
+		MovingObject log2 = new MovingObject(3, 85, 55, 5, (TILE_SIZE*2), logHeight, rightSpawn, row(12), logColor, "LEFT", true);
+		//Logs 3 (row 13)
+		MovingObject log3 = new MovingObject(2, 125, 30, 5, (TILE_SIZE*4), logHeight, rightSpawn+75, row(13), logColor, "LEFT", true);
+		//Logs 4 (row 14)
+		MovingObject log4 = new MovingObject(2, 65, 55, 5, (TILE_SIZE*3), logHeight, leftSpawn-75, row(14), logColor, "RIGHT", true);
+		//Logs 2 (row 15)
+		MovingObject log5 = new MovingObject(3, 85, 55, 5, (TILE_SIZE*2), logHeight, rightSpawn, row(15), logColor, "LEFT", true);
 		
 		//Stack pane to put objects on top of each other
 		StackPane stack = new StackPane();
@@ -149,14 +153,16 @@ public class Grid
 		stack.getChildren().add(player); //Add player to stack pane
 		
 		//Add the arrays of moving objects on to the stack pane
-		car1.toPane(stack); //Cars 1 (row 2)
-		car2.toPane(stack); //Cars 2 (row 3)
-		car3.toPane(stack); //Cars 3 (row 4)
-		car4.toPane(stack); //Cars 4 (row 5)
-		truck.toPane(stack); //Trucks (row 6)
-		log1.toPane(stack); //Logs 1 (row 9)
-		log2.toPane(stack); //Logs 2 (row 10)
-		log3.toPane(stack); //Logs 3 (row 12)
+		car1.toPane(stack); //Cars 1 (row 5)
+		car2.toPane(stack); //Cars 2 (row 6)
+		car3.toPane(stack); //Cars 3 (row 7)
+		car4.toPane(stack); //Cars 4 (row 8)
+		truck.toPane(stack); //Trucks (row 9)
+		log1.toPane(stack); //Logs 1 (row 12)
+		log2.toPane(stack); //Logs 2 (row 13)
+		log3.toPane(stack); //Logs 3 (row 14)
+		log4.toPane(stack); //Logs 4 (row 15)
+		log5.toPane(stack); //Logs 5 (row 16)
 		
 		//Stack pane layout
 		stack.setAlignment(Pos.CENTER);
@@ -174,9 +180,11 @@ public class Grid
 		animateRectangles(car3, player, stack); //Cars 3 (row 4)
 		animateRectangles(car4, player, stack); //Cars 4 (row 5)
 		animateRectangles(truck, player, stack); //Trucks (row 6)
-		animateRectangles(log1, player, stack); //Logs 1 (row 9)
-		animateRectangles(log2, player, stack); //Logs 2 (row 10)
-		animateRectangles(log3, player, stack); //Logs 3 (row 12)
+		animateRectangles(log1, player, stack); //Logs 1 (row 12)
+		animateRectangles(log2, player, stack); //Logs 2 (row 13)
+		animateRectangles(log3, player, stack); //Logs 3 (row 14)
+		animateRectangles(log4, player, stack); //Logs 4 (row 15)
+		animateRectangles(log5, player, stack); //Logs 5 (row 16)
 		
 		mover.setOnFinished(event->{
 			isMoving = false;

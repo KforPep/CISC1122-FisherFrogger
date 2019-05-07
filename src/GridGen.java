@@ -1,5 +1,5 @@
 /*
- * Bridget Dixon and Phil Nicholson
+ * Bridget Dixon, Caitlin, and Phil Nicholson
  * This class creates and returns the Grid to the main program to
  * display as the background.
  */
